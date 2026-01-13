@@ -72,6 +72,10 @@ while True:
         prev_people_state = False
     else: 
         people_state = True # default waking setting is setting it for people
+        if people_state != prev_people_state:
+            prev_people_state = people_state
+            
+
 
 
 
