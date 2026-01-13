@@ -55,6 +55,26 @@ def active_behaviour():
 
  '''
 
+def plantButtonPressed(state1, state2): 
+    if state1 != state2: 
+        r_led.value = 1
+        g_led.value = 0
+        b_led.value = 1 
+    else: 
+        continue 
+    return 
+
+
+def peopleButtonPressed(state1, state2): 
+    if state1 != state2: 
+        r_led.value = 1
+        g_led.value = 1
+        b_led.value = 1 
+    else: 
+        continue 
+    return 
+
+
 
 
 # Loop so the code runs continuously
@@ -68,13 +88,32 @@ while True:
         b_led.value = 0
         plant_state = False
         people_state = False
-        prev_plant_state = False
+        prev_plant_state = False # these can be replaced with 0 or zero depending on behaviour of cct 
         prev_people_state = False
     else: 
         people_state = True # default waking setting is setting it for people
         if people_state != prev_people_state:
             prev_people_state = people_state
             
+
+# general button functioning: 
+    people_state = bool(people_button.value) 
+    plant_state = bool(plant_button.value) 
+    if people_state == True: 
+        prev_people_state_people_state = people_state
+        prev_plant_state = False
+    elif plant_state == True: 
+        prev_plant_state = plant_state
+        prev_people_state = False 
+    else:
+        peopleButtonPressed(people_state, prev_people_state)
+        plantButtonPressed(plant_state, prev_plant_state)
+    wait(0.1)
+
+
+    
+
+
 
 
 
