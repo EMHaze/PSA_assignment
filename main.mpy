@@ -11,7 +11,7 @@ r_led = digitalio.DigitalInOut(board.GP16)
 r_led.direction = digitalio.Direction.OUTPUT
 
 # other leds 
-b_led = digitalio.DigitalInOut(board.GP17)
+b_led = digitalio.DigitalInOut(board.GP19)
 b_led.direction = digitalio.Direction.OUTPUT
 
 g_led = digitalio.DigitalInOut(board.GP17)
@@ -26,7 +26,7 @@ prev_state = 0
 
 
 #button to change state of lights (plants or people setting)
-mode_button = digitalio.DigitalInOut(board.GP15)
+mode_button = digitalio.DigitalInOut(board.GP11)
 mode_button.direction = digitalio.Direction.INPUT
 mode_button.pull = digitalio.Pull.UP # Set internal pull-up resistor
 mode_prev_state = 0
@@ -41,7 +41,8 @@ while True:
     if cur_state == 1:
         prev_state = cur_state
     else:
-        led.value = active
+        r_led.value = active
+        b_led.value = active 
     #cur_state = not button.value
     if cur_state != prev_state:
         active = not active
@@ -58,7 +59,7 @@ while True:
             g_led.value = active
         if mode_cur_state != mode_prev_state:
             mode = not mode
-        mode_prev_state = mode_cur_state
+            mode_prev_state = mode_cur_state
         g_led.value = mode 
 
 
