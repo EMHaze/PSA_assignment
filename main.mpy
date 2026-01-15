@@ -27,12 +27,13 @@ while True:
     if cur_state == 1:
         prev_state = cur_state
     else:
-        continue
-    cur_state = not button.value
+        led.value = active
+    #cur_state = not button.value
     if cur_state != prev_state:
         active = not active
-    else:
-        continue
+        prev_state = cur_state
+
+    led.value = active
 
     
 
