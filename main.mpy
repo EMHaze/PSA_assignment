@@ -1,115 +1,38 @@
-# Code from Lab1 to make an external LED blink
+'''
+Adapted from ESC204 Lab 1 Task D
+Task: Light up external LED on button press.
+'''
 # Import libraries needed for blinking the LED
-#CODE FOR 3 BUTTONS 
 import board
 import digitalio
-import time
 
-# Configure the GPIO pin connected to an external LED as a digital output
-r_led = digitalio.DigitalInOut(board.GP16)
-b_led = digitalio.DigitalInOut(board.GP15)
-g_led = digitalio.DigitalInOut(board.GP14)
+# Configure the GPIO pin connected to the LED as a digital output
+led = digitalio.DigitalInOut(board.GP16)
 led.direction = digitalio.Direction.OUTPUT
 
-
-# button initializing 
 # Configure the GPIO pin connected to the button as a digital input
-power_button = digitalio.DigitalInOut(board.GP19)
-power_button.direction = digitalio.Direction.INPUT
-power_button.pull = digitalio.Pull.UP # Set internal pull-up resistor
+button = digitalio.DigitalInOut(board.GP15)
+button.direction = digitalio.Direction.INPUT
+button.pull = digitalio.Pull.UP # Set internal pull-up resistor
 active = 0
-
-people_button = digitalio.DigitalInOut(board.GP20)
-people_button.direction = digitalio.Direction.INPUT
-people_button.pull = digitalio.Pull.UP # Set internal pull-up resistor
-people_state = False 
-prev_people_state = False
+prev_state = 0
 
 
-plant_button = digitalio.DigitalInOut(board.GP19) # plant button essentially turns off green light 
-plant_button.direction = digitalio.Direction.INPUT
-plant_button.pull = digitalio.Pull.UP # Set internal pull-up resistor
-plant_state = False
-prev_people_state = False
-
-
-
-
-
-'''
-# function to define behaviour while device is turned on 
-
-def active_behaviour():
-    global people_state, plant_button
-    if people_state:
-        r_led.value = 1
-        g_led.value = 1
-        b_led.value = 1
-    if plant_state:
-        r_led.value = 1
-        g_led.value = 0
-        b_led.value = 1 
-    else: 
-        continue 
-    return 
-
- '''
-
-def plantButtonPressed(state1, state2): 
-    if state1 != state2: 
-        r_led.value = 1
-        g_led.value = 0
-        b_led.value = 1 
-    else: 
-        continue 
-    return 
-
-
-def peopleButtonPressed(state1, state2): 
-    if state1 != state2: 
-        r_led.value = 1
-        g_led.value = 1
-        b_led.value = 1 
-    else: 
-        continue 
-    return 
-
-
-
+# Print a message on the serial console
+print('Hello! My LED is controlled by the button.') # checking if program successfully runs 
 
 # Loop so the code runs continuously
 while True:
-    if power_button.value == 0: 
-        active += 1 
-    
-    if active % 2 == 0:
-        r_led.value = 0
-        g_led.value = 0
-        b_led.value = 0
-        plant_state = False
-        people_state = False
-        prev_plant_state = False # these can be replaced with 0 or zero depending on behaviour of cct 
-        prev_people_state = False
-    else: 
-        people_state = True # default waking setting is setting it for people
-        if people_state != prev_people_state:
-            prev_people_state = people_state
-            
-
-# general button functioning: 
-    people_state = bool(people_button.value) 
-    plant_state = bool(plant_button.value) 
-    if people_state == True: 
-        prev_people_state_people_state = people_state
-        prev_plant_state = False
-    elif plant_state == True: 
-        prev_plant_state = plant_state
-        prev_people_state = False 
+    cur_state = not button.value
+    if cur_state == 1:
+        prev_state = cur_state
     else:
-        peopleButtonPressed(people_state, prev_people_state)
-        plantButtonPressed(plant_state, prev_plant_state)
-    wait(0.1)
-
+        continue
+    cur_state = not button.value
+    if cur_state != prev_state:
+        active = not active
+    else:
+        continue
 
     
 
