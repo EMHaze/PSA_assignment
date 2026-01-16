@@ -1,0 +1,32 @@
+import time, board, pwmio
+
+tone = pwmio.PWMOut(board.GP15, variable_frequency=True)
+tone.duty_cycle = 32768
+
+notes = [n * 2 for n in [330, 330, 349, 392, 440, 392, 349, 330, 330, 330, 349, 330, 294, 262, 247, 196]]
+tone_duration = 0.2
+rest_duration = 0.2
+
+def play(freq, dur):
+    tone.frequency = freq
+    time.sleep(dur)
+
+while True:
+    for n in notes:
+        tone.duty_cycle = 32768
+        play(n, tone_duration)
+        
+        tone.duty_cycle = 0
+        time.sleep(rest_duration)
+        
+# E E F G G F E D C
+'''
+E = 330
+F = 349
+G = 392
+D = 294
+C = 262
+
+330, 330, 349, 392, 392, 349, 330, 294, 262
+'''     
+
