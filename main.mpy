@@ -5,13 +5,35 @@ Task: Light up external LED on button press.
 # Import libraries needed for blinking the LED
 import board
 import digitalio
+import time, board, pwmio
+
+notes = [n * 2 for n in [330, 330]]
+tone = pwmio.PWMOut(board.GP15, variable_frequency=True)
+tone_duration = 0.2
+rest_duration = 0.2
+
+def play(freq, dur):
+    tone.frequency = freq
+    time.sleep(dur)
+return
+
+
+def beep(notes):
+    for n in notes:
+            tone.duty_cycle = 32768
+            play(n, tone_duration)
+        
+            tone.duty_cycle = 0
+            time.sleep(rest_duration)
+return 
+        
 
 # Configure the GPIO pin connected to the LED as a digital output
 r_led = digitalio.DigitalInOut(board.GP16)
 r_led.direction = digitalio.Direction.OUTPUT
 
 # other leds 
-b_led = digitalio.DigitalInOut(board.GP17)
+b_led = digitalio.DigitalInOut(board.GP19)
 b_led.direction = digitalio.Direction.OUTPUT
 
 g_led = digitalio.DigitalInOut(board.GP17)
@@ -26,7 +48,7 @@ prev_state = 0
 
 
 #button to change state of lights (plants or people setting)
-mode_button = digitalio.DigitalInOut(board.GP15)
+mode_button = digitalio.DigitalInOut(board.GP11)
 mode_button.direction = digitalio.Direction.INPUT
 mode_button.pull = digitalio.Pull.UP # Set internal pull-up resistor
 mode_prev_state = 0
@@ -40,8 +62,10 @@ while True:
     cur_state = not button.value
     if cur_state == 1:
         prev_state = cur_state
+        beep(notes)
     else:
-        led.value = active
+        r_led.value = active
+        b_led.value = active 
     #cur_state = not button.value
     if cur_state != prev_state:
         active = not active
@@ -58,7 +82,7 @@ while True:
             g_led.value = active
         if mode_cur_state != mode_prev_state:
             mode = not mode
-        mode_prev_state = mode_cur_state
+            mode_prev_state = mode_cur_state
         g_led.value = mode 
 
 
