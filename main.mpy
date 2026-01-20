@@ -7,6 +7,25 @@ import board
 import digitalio
 import time, board, pwmio
 
+notes = [n * 2 for n in [330, 330]]
+tone = pwmio.PWMOut(board.GP15, variable_frequency=True)
+tone_duration = 0.2
+rest_duration = 0.2
+
+def play(freq, dur):
+    tone.frequency = freq
+    time.sleep(dur)
+return
+
+
+def beep(notes):
+    for n in notes:
+            tone.duty_cycle = 32768
+            play(n, tone_duration)
+            tone.duty_cycle = 0
+            time.sleep(rest_duration)
+return 
+        
 
 # Configure the GPIO pin connected to the LED as a digital output
 r_led = digitalio.DigitalInOut(board.GP16)
@@ -42,6 +61,7 @@ while True:
     cur_state = not button.value
     if cur_state == 1:
         prev_state = cur_state
+        beep(notes)
     else:
         r_led.value = active
         b_led.value = active 
