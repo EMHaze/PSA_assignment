@@ -4,7 +4,7 @@ import time
 import time, board, pwmio
 
 notes = [n * 2 for n in [330, 330]]
-tone = pwmio.PWMOut(board.GP15, variable_frequency=True)
+tone = pwmio.PWMOut(board.GP28, variable_frequency=True)
 tone_duration = 0.2
 rest_duration = 0.2
 
